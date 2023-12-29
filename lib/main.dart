@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
 import 'package:provider/provider.dart';
-import 'provider.dart';
+import 'home.dart';
 import './components/appbar.dart';
 import './components/bottom_navbar.dart';
+import './controller/reserve_api.dart';
+import 'provider.dart';
 import 'profile.dart';
+import 'dataprovider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => UserProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => DataProvider()),
+        // Add other providers if you have them
+      ],
       child: const MyApp(),
     ),
   );
 }
 
 class MainLayout extends StatelessWidget {
+  const MainLayout({super.key});
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -30,11 +38,21 @@ class MainLayout extends StatelessWidget {
           builder: (context, pageIndex, _) {
             switch (pageIndex) {
               case 0:
-                return Home();
+                Provider.of<DataProvider>(context, listen: false)
+                    .fetchAvailableSpots();
+                return Consumer<DataProvider>(
+                  builder: (context, dataProvider, _) {
+                    if (dataProvider.availableSpots.isEmpty) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      return Home(data: dataProvider.availableSpots);
+                    }
+                  },
+                );
               case 2:
                 return Profile();
               default:
-                return SizedBox
+                return const SizedBox
                     .shrink(); // Return an empty widget or handle other cases if needed
             }
           },
