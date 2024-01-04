@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'home.dart';
+import 'pages/home.dart';
 import './components/appbar.dart';
 import './components/bottom_navbar.dart';
-import './controller/reserve_api.dart';
-import 'provider.dart';
-import 'profile.dart';
-import 'dataprovider.dart';
+import 'api/reserve_api.dart';
+import 'provider/provider.dart';
+import 'pages/profile.dart';
+import 'provider/dataprovider.dart';
 
 void main() {
   runApp(
@@ -50,7 +50,7 @@ class MainLayout extends StatelessWidget {
                   },
                 );
               case 2:
-                return Profile();
+                return const Profile();
               default:
                 return const SizedBox
                     .shrink(); // Return an empty widget or handle other cases if needed

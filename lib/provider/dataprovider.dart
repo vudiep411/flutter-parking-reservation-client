@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './controller/reserve_api.dart';
+import '../api/reserve_api.dart';
 
 class DataProvider with ChangeNotifier {
   String _token = "";

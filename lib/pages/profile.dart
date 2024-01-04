@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import './components/appbar.dart';
+import '../components/appbar.dart';
 import 'package:provider/provider.dart';
-import 'provider.dart';
-import './components/bottom_navbar.dart';
+import '../provider/provider.dart';
+import '../components/bottom_navbar.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
