@@ -15,6 +15,16 @@ class _HomeState extends State<Home> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
+  List<dynamic> get filteredData {
+    if (_searchQuery.isEmpty) {
+      return widget.data;
+    } else {
+      return widget.data.where((item) {
+        return item['parking_spot_id'].toString().contains(_searchQuery);
+      }).toList();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -27,7 +37,6 @@ class _HomeState extends State<Home> {
             height: 35.0,
             width: screenWidth * 0.98, // Take up the maximum width
             decoration: BoxDecoration(
-              color: Colors.white,
               borderRadius: BorderRadius.circular(30),
               border: Border.all(color: Colors.grey),
             ),
@@ -63,11 +72,11 @@ class _HomeState extends State<Home> {
         ),
       ),
       body: ListView.builder(
-        itemCount: widget.data.length,
+        itemCount: filteredData.length,
         itemBuilder: (context, index) {
           return CustomCard(
-            parkingSpotId: widget.data[index]['parking_spot_id'],
-            rate: widget.data[index]['rate'],
+            parkingSpotId: filteredData[index]['parking_spot_id'],
+            rate: filteredData[index]['rate'],
             idx: index,
           );
         },

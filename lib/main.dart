@@ -49,7 +49,7 @@ class MainLayout extends StatelessWidget {
                     }
                   },
                 );
-              case 2:
+              case 1:
                 return const Profile();
               default:
                 return const SizedBox

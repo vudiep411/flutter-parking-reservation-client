@@ -16,10 +16,6 @@ class BottomNavbar extends StatelessWidget {
           icon: Icon(Icons.home),
         ),
         BottomNavigationBarItem(
-          label: "Search",
-          icon: Icon(Icons.search),
-        ),
-        BottomNavigationBarItem(
           label: "Profile",
           icon: Icon(Icons.person),
         ),
