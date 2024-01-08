@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../api/auth_api.dart';
 
 class UserProvider extends ChangeNotifier {
   Brightness _currentBrightness = Brightness.light;
@@ -7,22 +8,32 @@ class UserProvider extends ChangeNotifier {
   ValueNotifier<int> currentPageNotifier = ValueNotifier<int>(0);
 
   String? _jwtToken;
-  String? _userEmail;
+  String? _jwtRefreshToken;
 
   Brightness get currentBrightness => _currentBrightness;
   Color get textColor => _textColor;
   int get idx => _idx;
 
   String? get jwtToken => _jwtToken;
-  String? get userEmail => _userEmail;
+  String? get jwtRefreshToken => _jwtRefreshToken;
+
+  Future<Map<String, dynamic>> signIn(Map<String, dynamic> data) async {
+    try {
+      final Map<String, dynamic> response =
+          await AuthAPI.postData('login', data);
+      if (response["error"] == null) {
+        // print(response);
+        _jwtToken = response['token'];
+        _jwtRefreshToken = response['refreshToken'];
+      }
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
 
   setJwtToken(String? token) {
     _jwtToken = token;
-    notifyListeners();
-  }
-
-  setUserEmail(String? email) {
-    _userEmail = email;
     notifyListeners();
   }
 

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import '../provider/provider.dart';
+import 'package:provider/provider.dart';
 
 class SignInRegisterPage extends StatefulWidget {
+  const SignInRegisterPage({super.key});
+
   @override
   _SignInRegisterPageState createState() => _SignInRegisterPageState();
 }
@@ -21,9 +25,19 @@ class _SignInRegisterPageState extends State<SignInRegisterPage> {
     });
   }
 
+  Map<String, String> get userData => {
+        'email': _emailController.text.trim(),
+        'password': _passwordController.text.trim(),
+        if (!_isSignIn) 'name': _nameController.text.trim(),
+        if (!_isSignIn) 'phoneNumber': _phoneController.text.trim(),
+        if (!_isSignIn)
+          'confirmPassword': _confirmPasswordController.text.trim(),
+      };
+
   @override
   Widget build(BuildContext context) {
     List<Widget> formFields = [];
+    final userProvider = Provider.of<UserProvider>(context);
 
     if (!_isSignIn) {
       formFields.addAll([
@@ -58,13 +72,28 @@ class _SignInRegisterPageState extends State<SignInRegisterPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ...formFields,
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 // Implement sign-in or register logic here
                 if (_isSignIn) {
                   // Sign In Logic
                   print('Signing In...');
+                  final res = await userProvider.signIn(userData);
+                  if (res['error'] != null) {
+                    // show error message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Username or password is incorrect.'),
+                        duration: Duration(seconds: 3),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  } else {
+                    // redirect to profile
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushReplacementNamed(context, '/profile');
+                  }
                 } else {
                   // Register Logic
                   print('Registering...');
@@ -72,7 +101,7 @@ class _SignInRegisterPageState extends State<SignInRegisterPage> {
               },
               child: Text(_isSignIn ? 'Sign In' : 'Register'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextButton(
               onPressed: _toggleForm,
               child: Text(_isSignIn

@@ -17,7 +17,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context);
 
-    if (userProvider.userEmail == null && userProvider.jwtToken == null) {
+    if (userProvider.jwtToken == null) {
       return Scaffold(
         body: Center(
           child: ElevatedButton(
