@@ -32,6 +32,21 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  Future<Map<String, dynamic>> signUp(Map<String, dynamic> data) async {
+    try {
+      final Map<String, dynamic> response =
+          await AuthAPI.postData('register', data);
+      if (response["error"] == null) {
+        // print(response);
+        _jwtToken = response['token'];
+        _jwtRefreshToken = response['refreshToken'];
+      }
+      return response;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   setJwtToken(String? token) {
     _jwtToken = token;
     notifyListeners();

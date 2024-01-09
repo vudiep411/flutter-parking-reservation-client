@@ -76,9 +76,9 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
       title: 'Dashboard App',
-      home: MainLayout(),
+      home: const MainLayout(),
       routes: {
-        '/search': (context) => MainLayout(),
+        '/profile': (context) => const MainLayout(),
       },
     );
   }

@@ -82,6 +82,7 @@ class _SignInRegisterPageState extends State<SignInRegisterPage> {
                   final res = await userProvider.signIn(userData);
                   if (res['error'] != null) {
                     // show error message
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Username or password is incorrect.'),
@@ -95,8 +96,53 @@ class _SignInRegisterPageState extends State<SignInRegisterPage> {
                     Navigator.pushReplacementNamed(context, '/profile');
                   }
                 } else {
+                  // Validate fields
+                  if (_emailController.text.isEmpty ||
+                      _passwordController.text.isEmpty ||
+                      _nameController.text.isEmpty ||
+                      _phoneController.text.isEmpty ||
+                      _confirmPasswordController.text.isEmpty) {
+                    // Show error message if any field is empty
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please fill in all fields.'),
+                        duration: Duration(seconds: 3),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return; // Exit the function
+                  }
+
                   // Register Logic
                   print('Registering...');
+                  if (_passwordController.text !=
+                      _confirmPasswordController.text) {
+                    // Show error message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Passwords do not match.'),
+                        duration: Duration(seconds: 3),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return; // Exit the function
+                  }
+                  final res = await userProvider.signUp(userData);
+                  if (res['error'] != null) {
+                    // show error message
+                    // ignore: use_build_context_synchronously
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Username already exist'),
+                        duration: Duration(seconds: 3),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  } else {
+                    // redirect to profile
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushReplacementNamed(context, '/profile');
+                  }
                 }
               },
               child: Text(_isSignIn ? 'Sign In' : 'Register'),
